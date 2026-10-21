@@ -2,7 +2,7 @@
   "$schema": "https://danklinux.com/schemas/plugin.json",
   "id": "keybindCheatsheet",
   "name": "Keybind Cheatsheet",
-  "description": "Quick access & popup for Hyprland and DMS keybind cheatsheet, settings, and hotkeys",
+  "description": "Quick access & popup for DMS keybind cheatsheet, settings, and hotkey configuration",
   "version": "1.0.0",
   "author": "consciousY",
   "type": "composite",
@@ -19,8 +19,6 @@
   "icon": "keyboard",
   "requires_dms": ">=1.0.0",
   "permissions": [
-    "settings_read",
-    "settings_write",
-    "process"
+    "settings_read"
   ]
 }

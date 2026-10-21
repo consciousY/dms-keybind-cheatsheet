@@ -11,7 +11,7 @@ PluginSettings {
 
     StyledText {
         width: parent.width
-        text: I18n.tr("Keybind Cheatsheet Quick Access")
+        text: I18n.tr("Keybind Cheatsheet Plugin")
         font.pixelSize: Theme.fontSizeLarge
         font.weight: Font.Bold
         color: Theme.surfaceText
@@ -19,7 +19,7 @@ PluginSettings {
 
     StyledText {
         width: parent.width
-        text: I18n.tr("Global shortcut Super + K is configured in Hyprland to instantly pop up the Keybind Settings & Cheatsheet.")
+        text: I18n.tr("Provides quick access to the keybind settings window and interactive cheatsheet overlay from DankBar, Control Center, and IPC.")
         font.pixelSize: Theme.fontSizeMedium
         color: Theme.surfaceVariantText
         wrapMode: Text.WordWrap
@@ -27,8 +27,8 @@ PluginSettings {
 
     ToggleSetting {
         settingKey: "showBarLabel"
-        label: I18n.tr("Show 'Super+K' label on bar pill")
-        description: I18n.tr("Displays the shortcut text next to the keyboard icon in the DankBar")
+        label: I18n.tr("Show 'Keybinds' label on bar pill")
+        description: I18n.tr("When disabled, only the keyboard icon is shown in the DankBar pill")
         defaultValue: true
     }
 

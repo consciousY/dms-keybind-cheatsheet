@@ -9,10 +9,34 @@ import qs.Modules.Plugins
 PluginComponent {
     id: root
 
+    readonly property bool showBarLabel: pluginData?.showBarLabel ?? true
+    readonly property bool openCheatsheetOnRightClick: pluginData?.openCheatsheetOnRightClick ?? true
+
+    function toggleCheatsheet(): void {
+        const provider = KeybindsService?.cheatsheetProvider || CompositorService?.compositor || "hyprland";
+        KeybindsService?.loadCheatsheet(provider);
+        if (PopoutService?.hyprKeybindsModalLoader) {
+            PopoutService.hyprKeybindsModalLoader.active = true;
+            if (PopoutService.hyprKeybindsModalLoader.item) {
+                if (PopoutService.hyprKeybindsModalLoader.item.shouldBeVisible) {
+                    PopoutService.hyprKeybindsModalLoader.item.close();
+                } else {
+                    PopoutService.hyprKeybindsModalLoader.item.open();
+                }
+            } else {
+                Qt.callLater(() => {
+                    if (PopoutService.hyprKeybindsModalLoader?.item) {
+                        PopoutService.hyprKeybindsModalLoader.item.open();
+                    }
+                });
+            }
+        }
+    }
+
     // Control Center Integration
     ccWidgetIcon: "keyboard"
     ccWidgetPrimaryText: I18n.tr("Keybind Cheatsheet")
-    ccWidgetSecondaryText: "Super + K"
+    ccWidgetSecondaryText: I18n.tr("Settings & Cheatsheet")
     ccWidgetIsActive: true
 
     onCcWidgetToggled: {
@@ -31,14 +55,14 @@ PluginComponent {
                 spacing: Theme.spacingS
 
                 StyledText {
-                    text: I18n.tr("Keybind Cheatsheet")
+                    text: I18n.tr("Keybind Management")
                     font.pixelSize: Theme.fontSizeMedium
                     font.weight: Font.DemiBold
                     color: Theme.surfaceText
                 }
 
                 StyledText {
-                    text: I18n.tr("Press Super + K anywhere to open keybind settings & cheatsheet")
+                    text: I18n.tr("Quick access to view shortcuts, open settings, or launch the cheatsheet overlay")
                     font.pixelSize: Theme.fontSizeSmall
                     color: Theme.surfaceVariantText
                 }
@@ -108,7 +132,7 @@ PluginComponent {
                             hoverEnabled: true
                             cursorShape: Qt.PointingHandCursor
                             onClicked: {
-                                KeybindsService?.loadCheatsheet();
+                                root.toggleCheatsheet();
                             }
                         }
                     }
@@ -138,7 +162,8 @@ PluginComponent {
                 }
 
                 StyledText {
-                    text: "Super+K"
+                    visible: root.showBarLabel
+                    text: I18n.tr("Keybinds")
                     font.pixelSize: Theme.fontSizeSmall
                     font.weight: Font.Medium
                     color: Theme.surfaceText
@@ -154,7 +179,11 @@ PluginComponent {
 
                 onClicked: (mouse) => {
                     if (mouse.button === Qt.RightButton) {
-                        KeybindsService?.loadCheatsheet();
+                        if (root.openCheatsheetOnRightClick) {
+                            root.toggleCheatsheet();
+                        } else {
+                            PopoutService?.focusOrToggleSettingsWithTab("keybinds");
+                        }
                     } else {
                         PopoutService?.focusOrToggleSettingsWithTab("keybinds");
                     }

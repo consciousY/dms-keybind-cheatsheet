@@ -9,20 +9,32 @@ PluginComponent {
     id: root
 
     function toggleCheatsheet(): void {
-        const provider = KeybindsService?.cheatsheetProvider || CompositorService?.compositor || "hyprland";
+        if (!KeybindsService?.cheatsheetAvailable) {
+            PopoutService?.focusOrToggleSettingsWithTab("keybinds");
+            return;
+        }
+
+        const provider = KeybindsService?.cheatsheetProvider || "hyprland";
         KeybindsService?.loadCheatsheet(provider);
-        if (PopoutService?.hyprKeybindsModalLoader) {
-            PopoutService.hyprKeybindsModalLoader.active = true;
-            if (PopoutService.hyprKeybindsModalLoader.item) {
-                if (PopoutService.hyprKeybindsModalLoader.item.shouldBeVisible) {
-                    PopoutService.hyprKeybindsModalLoader.item.close();
+
+        if (typeof PopoutService?.showKeybindsModal === "function") {
+            PopoutService.showKeybindsModal();
+            return;
+        }
+
+        const loader = PopoutService?.keybindsModalLoader || PopoutService?.hyprKeybindsModalLoader;
+        if (loader) {
+            loader.active = true;
+            if (loader.item) {
+                if (loader.item.shouldBeVisible) {
+                    loader.item.close();
                 } else {
-                    PopoutService.hyprKeybindsModalLoader.item.open();
+                    loader.item.open();
                 }
             } else {
                 Qt.callLater(() => {
-                    if (PopoutService.hyprKeybindsModalLoader?.item) {
-                        PopoutService.hyprKeybindsModalLoader.item.open();
+                    if (loader.item) {
+                        loader.item.open();
                     }
                 });
             }

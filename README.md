@@ -1,18 +1,16 @@
 # Keybind Cheatsheet Plugin for DankMaterialShell (DMS)
 
-A sleek, lightweight Quickshell plugin for **DankMaterialShell** that provides quick access to your compositor keybind settings and interactive cheatsheet overlay.
+A sleek, lightweight Quickshell plugin for **DankMaterialShell** that provides instant 1-click access to compositor keybind settings and the interactive cheatsheet overlay directly from your status bar and Control Center.
 
 ![DMS Keybind Cheatsheet](screenshot.png)
 
-## Features
+## Why This Plugin?
 
-- 📊 **DankBar Widget**: Minimal, elegant pill showing a keyboard icon and customizable label.
-  - **Left-Click**: Focuses or toggles the Keybind Settings window.
-  - **Right-Click**: Launches the full-screen interactive Keybinds Cheatsheet overlay.
-- 🎛️ **Control Center Tile**: Integrated tile and quick-action panel with direct buttons for settings and cheatsheet.
-- 📡 **IPC Target**: Exposes `dms ipc call keybindCheatsheet cheatsheet` and `open`/`toggle`.
-- ⚙️ **Configurable**: Easily enable/disable pill labels or customize right-click behavior via **DMS Settings → Plugins**.
-- 🚀 **Zero Overhead**: Fully native QML / Quickshell implementation, compositor-agnostic.
+While DMS provides keybind settings and cheatsheet features via CLI/IPC or through the launcher (such as `dankLauncherKeys`), **Keybind Cheatsheet** brings them front-and-center as an interactive desktop surface:
+- 🖱️ **Always Accessible**: Dedicated pill in your DankBar — left-click to open Settings, right-click to launch the visual Cheatsheet overlay.
+- 🎛️ **Control Center Integration**: Dedicated tile and detail panel for quick toggling alongside your system controls.
+- 📡 **IPC Daemon Target**: Exposes `dms ipc call keybindCheatsheet cheatsheet` and `open`/`toggle`.
+- ⚙️ **Configurable**: Toggle bar label visibility or right-click behaviors via **DMS Settings → Plugins**.
 
 ---
 
@@ -49,7 +47,7 @@ dms ipc call plugins enable keybindCheatsheet
 
 ## Optional: Global Hotkey Binding
 
-If you want a global keyboard shortcut (such as <kbd>Super</kbd> + <kbd>K</kbd>) to pop up the keybind settings or cheatsheet, you can optionally bind it in your compositor configuration:
+If you wish to trigger the settings or cheatsheet via a global compositor hotkey (such as <kbd>Super</kbd> + <kbd>K</kbd>), you can optionally add them to your compositor config:
 
 ### Hyprland (`~/.config/hypr/dms/binds-user.lua` or `hyprland.conf`)
 ```lua
@@ -67,6 +65,18 @@ binds {
     Mod+Shift+K { spawn "dms" "ipc" "call" "keybindCheatsheet" "cheatsheet"; }
 }
 ```
+
+---
+
+## Supported Compositors
+
+The cheatsheet overlay natively supports compositors with DMS cheatsheet providers:
+- **Hyprland**
+- **Niri**
+- **MangoWC**
+- **Aqueous**
+
+*(On other compositors, the plugin gracefully falls back to opening the Keybinds Settings tab).*
 
 ---
 

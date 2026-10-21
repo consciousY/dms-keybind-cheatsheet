@@ -11,22 +11,35 @@ PluginComponent {
 
     readonly property bool showBarLabel: pluginData?.showBarLabel ?? true
     readonly property bool openCheatsheetOnRightClick: pluginData?.openCheatsheetOnRightClick ?? true
+    readonly property bool cheatsheetSupported: KeybindsService?.cheatsheetAvailable ?? false
 
     function toggleCheatsheet(): void {
-        const provider = KeybindsService?.cheatsheetProvider || CompositorService?.compositor || "hyprland";
+        if (!cheatsheetSupported) {
+            PopoutService?.focusOrToggleSettingsWithTab("keybinds");
+            return;
+        }
+
+        const provider = KeybindsService?.cheatsheetProvider || "hyprland";
         KeybindsService?.loadCheatsheet(provider);
-        if (PopoutService?.hyprKeybindsModalLoader) {
-            PopoutService.hyprKeybindsModalLoader.active = true;
-            if (PopoutService.hyprKeybindsModalLoader.item) {
-                if (PopoutService.hyprKeybindsModalLoader.item.shouldBeVisible) {
-                    PopoutService.hyprKeybindsModalLoader.item.close();
+
+        if (typeof PopoutService?.showKeybindsModal === "function") {
+            PopoutService.showKeybindsModal();
+            return;
+        }
+
+        const loader = PopoutService?.keybindsModalLoader || PopoutService?.hyprKeybindsModalLoader;
+        if (loader) {
+            loader.active = true;
+            if (loader.item) {
+                if (loader.item.shouldBeVisible) {
+                    loader.item.close();
                 } else {
-                    PopoutService.hyprKeybindsModalLoader.item.open();
+                    loader.item.open();
                 }
             } else {
                 Qt.callLater(() => {
-                    if (PopoutService.hyprKeybindsModalLoader?.item) {
-                        PopoutService.hyprKeybindsModalLoader.item.open();
+                    if (loader.item) {
+                        loader.item.open();
                     }
                 });
             }
@@ -36,7 +49,7 @@ PluginComponent {
     // Control Center Integration
     ccWidgetIcon: "keyboard"
     ccWidgetPrimaryText: I18n.tr("Keybind Cheatsheet")
-    ccWidgetSecondaryText: I18n.tr("Settings & Cheatsheet")
+    ccWidgetSecondaryText: cheatsheetSupported ? I18n.tr("Settings & Cheatsheet") : I18n.tr("Settings")
     ccWidgetIsActive: true
 
     onCcWidgetToggled: {
@@ -45,11 +58,12 @@ PluginComponent {
 
     ccDetailContent: Component {
         Rectangle {
-            implicitHeight: 140
+            implicitHeight: detailCol.implicitHeight + Theme.spacingM * 2
             radius: Theme.cornerRadius
             color: Theme.surfaceContainerHigh
 
             ColumnLayout {
+                id: detailCol
                 anchors.fill: parent
                 anchors.margins: Theme.spacingM
                 spacing: Theme.spacingS
@@ -62,9 +76,13 @@ PluginComponent {
                 }
 
                 StyledText {
-                    text: I18n.tr("Quick access to view shortcuts, open settings, or launch the cheatsheet overlay")
+                    text: root.cheatsheetSupported
+                        ? I18n.tr("Quick access to view shortcuts, open settings, or launch the cheatsheet overlay")
+                        : I18n.tr("Quick access to view and configure compositor shortcuts in settings")
                     font.pixelSize: Theme.fontSizeSmall
                     color: Theme.surfaceVariantText
+                    wrapMode: Text.WordWrap
+                    Layout.fillWidth: true
                 }
 
                 Item { Layout.fillHeight: true }
@@ -75,7 +93,7 @@ PluginComponent {
 
                     StyledRect {
                         Layout.fillWidth: true
-                        height: 36
+                        height: Theme.buttonHeight
                         radius: Theme.cornerRadiusSmall
                         color: btn1Mouse.containsMouse ? Theme.surfaceContainerHighest : Theme.surfaceContainer
 
@@ -106,8 +124,9 @@ PluginComponent {
                     }
 
                     StyledRect {
+                        visible: root.cheatsheetSupported
                         Layout.fillWidth: true
-                        height: 36
+                        height: Theme.buttonHeight
                         radius: Theme.cornerRadiusSmall
                         color: btn2Mouse.containsMouse ? Theme.surfaceContainerHighest : Theme.surfaceContainer
 
@@ -178,12 +197,8 @@ PluginComponent {
                 acceptedButtons: Qt.LeftButton | Qt.RightButton
 
                 onClicked: (mouse) => {
-                    if (mouse.button === Qt.RightButton) {
-                        if (root.openCheatsheetOnRightClick) {
-                            root.toggleCheatsheet();
-                        } else {
-                            PopoutService?.focusOrToggleSettingsWithTab("keybinds");
-                        }
+                    if (mouse.button === Qt.RightButton && root.openCheatsheetOnRightClick && root.cheatsheetSupported) {
+                        root.toggleCheatsheet();
                     } else {
                         PopoutService?.focusOrToggleSettingsWithTab("keybinds");
                     }

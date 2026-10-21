@@ -4,7 +4,7 @@
   "name": "Keybind Cheatsheet",
   "description": "Quick access & popup for Hyprland and DMS keybind cheatsheet, settings, and hotkeys",
   "version": "1.0.0",
-  "author": "Robin",
+  "author": "consciousY",
   "type": "composite",
   "capabilities": [
     "dankbar-widget",

@@ -88,7 +88,7 @@ PluginComponent {
 
                     StyledRect {
                         Layout.fillWidth: true
-                        height: Theme.buttonHeight
+                        Layout.preferredHeight: Theme.buttonHeightS
                         radius: Theme.cornerRadiusSmall
                         color: btn1Mouse.containsMouse ? Theme.surfaceContainerHighest : Theme.surfaceContainer
 
@@ -121,7 +121,7 @@ PluginComponent {
                     StyledRect {
                         visible: root.cheatsheetSupported
                         Layout.fillWidth: true
-                        height: Theme.buttonHeight
+                        Layout.preferredHeight: Theme.buttonHeightS
                         radius: Theme.cornerRadiusSmall
                         color: btn2Mouse.containsMouse ? Theme.surfaceContainerHighest : Theme.surfaceContainer
 

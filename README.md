@@ -1,6 +1,6 @@
 # Keybind Cheatsheet Plugin for DankMaterialShell (DMS)
 
-A sleek, lightweight Quickshell plugin for **DankMaterialShell** that provides instant 1-click access to compositor keybind settings and the interactive cheatsheet overlay directly from your status bar and Control Center.
+A sleek, lightweight composite Quickshell plugin for **DankMaterialShell** that provides a DankBar pill and Control Center shortcut to open DMS keybind settings and the cheatsheet modal.
 
 ![DMS Keybind Cheatsheet](screenshot.png)
 

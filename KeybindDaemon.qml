@@ -17,12 +17,7 @@ PluginComponent {
         const provider = KeybindsService?.cheatsheetProvider || "hyprland";
         KeybindsService?.loadCheatsheet(provider);
 
-        if (typeof PopoutService?.showKeybindsModal === "function") {
-            PopoutService.showKeybindsModal();
-            return;
-        }
-
-        const loader = PopoutService?.keybindsModalLoader || PopoutService?.hyprKeybindsModalLoader;
+        const loader = PopoutService?.keybindsModalLoader;
         if (loader) {
             loader.active = true;
             if (loader.item) {

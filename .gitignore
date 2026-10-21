@@ -1,0 +1,10 @@
+# Cache and temporary files
+*.qmlc
+*.jsc
+*.bak
+*.swp
+*~
+.DS_Store
+
+# State files
+*_state.json

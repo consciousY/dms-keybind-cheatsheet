@@ -1,0 +1,26 @@
+{
+  "$schema": "https://danklinux.com/schemas/plugin.json",
+  "id": "keybindCheatsheet",
+  "name": "Keybind Cheatsheet",
+  "description": "Quick access & popup for Hyprland and DMS keybind cheatsheet, settings, and hotkeys",
+  "version": "1.0.0",
+  "author": "Robin",
+  "type": "composite",
+  "capabilities": [
+    "dankbar-widget",
+    "daemon",
+    "control-center"
+  ],
+  "components": {
+    "widget": "./KeybindWidget.qml",
+    "daemon": "./KeybindDaemon.qml"
+  },
+  "settings": "./KeybindSettings.qml",
+  "icon": "keyboard",
+  "requires_dms": ">=1.0.0",
+  "permissions": [
+    "settings_read",
+    "settings_write",
+    "process"
+  ]
+}
